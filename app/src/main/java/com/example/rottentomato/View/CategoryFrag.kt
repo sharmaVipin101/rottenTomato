@@ -18,7 +18,7 @@ import com.example.rottentomato.Model.Movie
 import com.example.rottentomato.R
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class TopRatedFrag : Fragment(), ClickListener {
+class CategoryFrag(val category:String) : Fragment(), ClickListener {
 
     lateinit var viewModel: MovieViewModel
     lateinit var adapter: MovieAdapter
@@ -26,7 +26,6 @@ class TopRatedFrag : Fragment(), ClickListener {
     lateinit var progressBar: ProgressBar
     lateinit var manager: LinearLayoutManager
     var isLoading = false
-    var category = "top_rated"
     var page = 1
 
     override fun onCreateView(
@@ -34,18 +33,16 @@ class TopRatedFrag : Fragment(), ClickListener {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_top_rated, container, false)
+        return inflater.inflate(R.layout.fragment_category, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-
-        progressBar = view.findViewById(R.id.progressbar3)
-        recyclerView = view.findViewById(R.id.recyclerView3)
+        progressBar = view.findViewById(R.id.progressbar)
+        recyclerView = view.findViewById(R.id.recyclerView)
         adapter = MovieAdapter(this)
-
         manager = LinearLayoutManager(activity)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
@@ -63,12 +60,12 @@ class TopRatedFrag : Fragment(), ClickListener {
         activity?.let {
             viewModel.MovieList.observe(
                 it, { list ->
-                    list?.let{
+                    list?.let {
                         adapter.updateList(it)
-
                     }
 
                 })
+
         }
 
         activity?.let {
@@ -82,27 +79,27 @@ class TopRatedFrag : Fragment(), ClickListener {
                 })
         }
 
-            recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
 
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
 
-                    if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
-                        isLoading = true
-                    }
-                }//while scrolling
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    isLoading = true
+                }
+            }//while scrolling
 
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-                    if(isLoading && manager.itemCount == manager.childCount + manager.findFirstVisibleItemPosition()){
-                        isLoading = false
-                        page++
-                        viewModel.nextPage(page)
+                if(isLoading && manager.itemCount == manager.childCount + manager.findFirstVisibleItemPosition()){
+                    isLoading = false
+                    page++
+                    viewModel.nextPage(page)
 
-                    }
-                }//while scrolling done
-            })
+                }
+            }//while scrolling done
+        })
 
     }
 
@@ -122,4 +119,5 @@ class TopRatedFrag : Fragment(), ClickListener {
         }
 
     }
+
 }

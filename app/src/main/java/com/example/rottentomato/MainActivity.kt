@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
 
 
     lateinit var tabLayout: TabLayout
-    lateinit var pager:ViewPager2
+    lateinit var viewPager:ViewPager2
     lateinit var adapter: FragmentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,22 +19,16 @@ class MainActivity : AppCompatActivity() {
 
 
         tabLayout = findViewById(R.id.tabLayout)
-        pager = findViewById(R.id.viewPager)
+        viewPager = findViewById(R.id.viewPager2)
 
         adapter = FragmentAdapter(supportFragmentManager,lifecycle)
-        pager.adapter = adapter
-
-
-        tabLayout.addTab(tabLayout.newTab().setText("Top Rated"))
-        tabLayout.addTab(tabLayout.newTab().setText("Upcoming"))
-        tabLayout.addTab(tabLayout.newTab().setText("Popular"))
-        tabLayout.addTab(tabLayout.newTab().setText("Now Playing"))
+        viewPager.adapter = adapter
 
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab != null) {
-                    pager.currentItem = tab.position
+                    viewPager.currentItem = tab.position
                 }
             }
 
@@ -48,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        pager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
