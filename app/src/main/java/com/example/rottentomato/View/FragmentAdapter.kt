@@ -7,18 +7,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class FragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :FragmentStateAdapter(fragmentManager,lifecycle) {
 
+    private val tabs = arrayOf("top_rated","upcoming","popular","now_playing")
+
     override fun getItemCount(): Int {
         return 4
     }
 
     override fun createFragment(position: Int): Fragment {
-
-      return  when(position){
-            1 ->  upcomingFrag()
-            2 ->  popularFrag()
-            3 ->  nowPlayingFrag()
-          else -> TopRatedFrag()
-        }
+      return CategoryFrag(tabs[position])
     }
 
 }
