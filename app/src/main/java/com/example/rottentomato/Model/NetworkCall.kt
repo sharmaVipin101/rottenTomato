@@ -18,10 +18,10 @@ class NetworkCall(private val context: Context){
     var isLoading = MutableLiveData<Boolean>()
     var movieList:MutableLiveData<ArrayList<Movie>> = MutableLiveData()
 
-    var movieList1: ArrayList<Movie> = ArrayList()//top rated
-    var movieList2: ArrayList<Movie> = ArrayList()//upcoming
-    var movieList3: ArrayList<Movie> = ArrayList()//popular
-    var movieList4: ArrayList<Movie> = ArrayList()//now playing
+    var toprated: ArrayList<Movie> = ArrayList()
+    var upcoming: ArrayList<Movie> = ArrayList()
+    var popular: ArrayList<Movie> = ArrayList()
+    var playing: ArrayList<Movie> = ArrayList()
 
 
     fun nextPage(page: Int){
@@ -38,13 +38,13 @@ class NetworkCall(private val context: Context){
 
         this.isLoading.value = true
 
-        var URL = getURL(genre,page)//
+        val url = getURL(genre,page)//
 
 
         val list = ArrayList<Movie>()
 
         val jsonObjectArray = JsonObjectRequest(
-            Request.Method.GET,URL,null,
+            Request.Method.GET,url,null,
             {
 
                 val movieJsonArray = it.getJSONArray("results")
@@ -68,17 +68,17 @@ class NetworkCall(private val context: Context){
                 this.isLoading.value = false
 
                 if(genre=="top_rated"){
-                    movieList1.addAll(list)
-                    getMovieList(movieList1)
+                    toprated.addAll(list)
+                    updateMovieList(toprated)
                 }else if(genre=="upcoming"){
-                    movieList2.addAll(list)
-                    getMovieList(movieList2)
+                    upcoming.addAll(list)
+                    updateMovieList(upcoming)
                 }else if(genre=="popular"){
-                    movieList3.addAll(list)
-                    getMovieList(movieList3)
+                    popular.addAll(list)
+                    updateMovieList(popular)
                 }else if(genre=="now_playing"){
-                    movieList4.addAll(list)
-                    getMovieList(movieList4)
+                    playing.addAll(list)
+                    updateMovieList(playing)
                 }
 
 
@@ -89,11 +89,9 @@ class NetworkCall(private val context: Context){
         VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectArray)
     }
 
-    private fun getMovieList(list:ArrayList<Movie>){
+    private fun updateMovieList(list:ArrayList<Movie>){
         movieList.value = list
     }
 
 
 }
-
-//logical part should be in repository

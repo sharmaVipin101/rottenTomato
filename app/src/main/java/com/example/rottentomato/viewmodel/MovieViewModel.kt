@@ -22,7 +22,6 @@ class MovieViewModel(application: Application) :AndroidViewModel(application){
     val isLoading:MutableLiveData<Boolean> = networkCall.isLoading
 
     fun fetchDataFromServer(genre:String,page:Int){
-        Log.d("error","call")
         networkCall.fetchDataFromServer(genre,page)
     }
 

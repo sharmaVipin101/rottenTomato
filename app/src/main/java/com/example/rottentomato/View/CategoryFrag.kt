@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,14 +17,19 @@ import com.bumptech.glide.Glide
 import com.example.movieexplorer.viewmodel.MovieViewModel
 import com.example.rottentomato.Model.Movie
 import com.example.rottentomato.R
+import com.example.rottentomato.databinding.BottomsheetBinding
+import com.example.rottentomato.databinding.FragmentCategoryBinding
+import com.example.rottentomato.databinding.ItemViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CategoryFrag(private val category:String) : Fragment(), ClickListener {
 
+
+    private lateinit var binding: FragmentCategoryBinding
+    private lateinit var bindingBottomSheet:BottomsheetBinding
     lateinit var viewModel: MovieViewModel
     lateinit var adapter: MovieAdapter
-    lateinit var recyclerView: RecyclerView
-    lateinit var progressBar: ProgressBar
     lateinit var manager: LinearLayoutManager
     var isLoading = false
     var page = 1
@@ -40,13 +45,22 @@ class CategoryFrag(private val category:String) : Fragment(), ClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentCategoryBinding.bind(view)
 
-        progressBar = view.findViewById(R.id.progressbar)
-        recyclerView = view.findViewById(R.id.recyclerView)
         adapter = MovieAdapter(this)
         manager = LinearLayoutManager(activity)
-        recyclerView.layoutManager = manager
-        recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = manager
+        binding.recyclerView.adapter = adapter
+
+
+        setupViewModel()
+        callToGetData()
+        observeData()
+        handlePagination()
+
+    }
+
+    private fun setupViewModel(){
 
         val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -56,8 +70,13 @@ class CategoryFrag(private val category:String) : Fragment(), ClickListener {
 
         viewModel = ViewModelProvider(this, factory).get(MovieViewModel::class.java)
 
-        Log.d("error",category)
+    }
+
+    private fun callToGetData(){
         viewModel.fetchDataFromServer(category,page)
+    }
+
+    private fun observeData(){
 
         activity?.let {
             viewModel.MovieList.observe(
@@ -69,19 +88,18 @@ class CategoryFrag(private val category:String) : Fragment(), ClickListener {
                 })
 
         }
-
         activity?.let {
             viewModel.isLoading.observe(
                 it, {
-                    if(it){
-                        progressBar.visibility = View.VISIBLE
-                    }else{
-                        progressBar.visibility = View.GONE
-                    }
+                    if(it) binding.progressbar.visibility = View.VISIBLE else binding.progressbar.visibility = View.GONE
                 })
         }
 
-        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+    }
+
+    private fun handlePagination(){
+
+        binding.recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -102,23 +120,24 @@ class CategoryFrag(private val category:String) : Fragment(), ClickListener {
                 }
             }//while scrolling done
         })
-
     }
 
     override fun onMovieClick(movie: Movie) {
 
-        var dia = activity?.let { BottomSheetDialog(it) }
+        val dialog = activity?.let { BottomSheetDialog(it) }
 
-        var view = layoutInflater.inflate(R.layout.bottomsheet,null,false)
+        val view = layoutInflater.inflate(R.layout.bottomsheet,null,false)
 
-        view.findViewById<TextView>(R.id.releaseDate).text = "Title: ${movie.title}"
-        view.findViewById<TextView>(R.id.overview).text = movie.overview
-        activity?.let { Glide.with(it).load(movie.poster).into(view.findViewById(R.id.poster)) }
+        bindingBottomSheet = BottomsheetBinding.bind(view)
 
-        if (dia != null) {
-            dia.setContentView(view)
-            dia.show()
-        }
+        bindingBottomSheet.releaseDate.text = "Title: ${movie.title}"
+        bindingBottomSheet.overview.text = movie.overview
+        activity?.let { Glide.with(it).load(movie.poster).into(bindingBottomSheet.poster) }
+
+        if (dialog != null) {
+            dialog.setContentView(view)
+            dialog.show()
+        }else Toast.makeText(activity,"Error displaying data",Toast.LENGTH_SHORT).show()
 
     }
 

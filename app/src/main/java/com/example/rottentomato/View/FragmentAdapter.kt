@@ -19,5 +19,3 @@ class FragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :F
 
 }
 
-// only one fragment should be there
-
