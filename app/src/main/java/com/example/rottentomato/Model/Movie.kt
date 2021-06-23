@@ -1,12 +1,12 @@
 package com.example.rottentomato.Model
 
 data class Movie(
-    var title:String,
-    var poster:String,
-    var thumbnail:String,
-    var release_Date:String,
-    var rating:Float,
-    var overview:String
+    val title:String?,
+    val poster:String?,
+    val thumbnail:String?,
+    val release_Date:String?,
+    val rating:Float?,
+    val overview:String?
 )
 
 

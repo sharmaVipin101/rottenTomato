@@ -18,7 +18,7 @@ import com.example.rottentomato.Model.Movie
 import com.example.rottentomato.R
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class CategoryFrag(val category:String) : Fragment(), ClickListener {
+class CategoryFrag(private val category:String) : Fragment(), ClickListener {
 
     lateinit var viewModel: MovieViewModel
     lateinit var adapter: MovieAdapter
