@@ -1,6 +1,7 @@
 package com.example.rottentomato.Model
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.android.volley.Request
@@ -39,6 +40,7 @@ class NetworkCall(private val context: Context){
 
         var URL = getURL(genre,page)//
 
+
         val list = ArrayList<Movie>()
 
         val jsonObjectArray = JsonObjectRequest(
@@ -51,14 +53,15 @@ class NetworkCall(private val context: Context){
                 {
                     val obj = movieJsonArray.getJSONObject(i)
 
-                    val tmp =  Movie(
-                        obj.getString("original_title"),
-                        "https://image.tmdb.org/t/p/original"+obj.getString("backdrop_path"),
-                        "https://image.tmdb.org/t/p/original"+obj.getString("poster_path"),
-                        obj.getString("release_date"),
-                        obj.getString("vote_average").toFloat(),
-                        obj.getString("overview"),
-                    )
+                    val title = obj.getString("original_title")
+                    val poster = "https://image.tmdb.org/t/p/original"+obj.getString("backdrop_path")
+                    val thumbnail = "https://image.tmdb.org/t/p/original"+obj.getString("poster_path")
+//                    val releaseDate = obj.getString("release_date")
+                    val rating = obj.getString("vote_average").toFloat()
+                    val overview = obj.getString("overview")
+
+                    val tmp =  Movie(title,poster,thumbnail,rating,overview)
+
                     list.add(tmp)
                 }
 

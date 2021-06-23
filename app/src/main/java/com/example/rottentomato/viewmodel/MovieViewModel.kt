@@ -2,6 +2,7 @@ package com.example.movieexplorer.viewmodel
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import android.widget.ProgressBar
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -21,6 +22,7 @@ class MovieViewModel(application: Application) :AndroidViewModel(application){
     val isLoading:MutableLiveData<Boolean> = networkCall.isLoading
 
     fun fetchDataFromServer(genre:String,page:Int){
+        Log.d("error","call")
         networkCall.fetchDataFromServer(genre,page)
     }
 
