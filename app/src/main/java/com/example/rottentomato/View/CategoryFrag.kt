@@ -28,11 +28,11 @@ class CategoryFrag(private val category:String) : Fragment(), ClickListener {
 
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var bindingBottomSheet:BottomsheetBinding
-    lateinit var viewModel: MovieViewModel
-    lateinit var adapter: MovieAdapter
-    lateinit var manager: LinearLayoutManager
-    var isLoading = false
-    var page = 1
+    private lateinit var viewModel: MovieViewModel
+    private lateinit var adapter: MovieAdapter
+    private lateinit var manager: LinearLayoutManager
+    private var isScrolling = false
+    private var page = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,17 +79,13 @@ class CategoryFrag(private val category:String) : Fragment(), ClickListener {
     private fun observeData(){
 
         activity?.let {
-            viewModel.MovieList.observe(
-                it, { list ->
-                    list?.let {
-                        adapter.updateList(it)
-                    }
-
-                })
-
+            viewModel.getList().observe(it,{
+                adapter.updateList(it)
+            })
         }
+
         activity?.let {
-            viewModel.isLoading.observe(
+            viewModel.getProgress().observe(
                 it, {
                     if(it) binding.progressbar.visibility = View.VISIBLE else binding.progressbar.visibility = View.GONE
                 })
@@ -105,15 +101,15 @@ class CategoryFrag(private val category:String) : Fragment(), ClickListener {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
-                    isLoading = true
+                    isScrolling = true
                 }
             }//while scrolling
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                if(isLoading && manager.itemCount == manager.childCount + manager.findFirstVisibleItemPosition()){
-                    isLoading = false
+                if(isScrolling && manager.itemCount == manager.childCount + manager.findFirstVisibleItemPosition()){
+                    isScrolling = false
                     page++
                     viewModel.nextPage(page)
 

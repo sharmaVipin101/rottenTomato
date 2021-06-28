@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:backgroundTint="#FFECB3"
+        android:backgroundTint="#ffbb7c"
         android:elevation="15dp">
 
         <LinearLayout
@@ -40,8 +40,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:background="#FFEBEE"
+                    android:layout_height="19dp"
+                    android:background="@color/white"
                     >
 
                 </View>
@@ -51,24 +51,33 @@
                     android:layout_height="80dp"
                     tools:hint="Movie Name"
                     android:textSize="25sp"
-                    android:textColor="@color/black"
+                    android:textColor="#2F4F4F"
                     android:gravity="center_vertical"
                     android:padding="8dp"
+                    android:fontFamily="cursive"
+                    android:textStyle="bold"
                     >
 
                 </TextView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#FFEFD5"
+                    >
 
+                </View>
                 <TextView
                     android:id="@+id/rating"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     tools:hint="Movie Rating"
                     android:textSize="25sp"
-                    android:textColor="#8f040e"
+                    android:textColor="#2F4F4F"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
                     android:shadowRadius="4"
                     android:padding="8dp"
+                    android:fontFamily="cursive"
                     >
 
                 </TextView>

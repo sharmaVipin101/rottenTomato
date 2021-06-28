@@ -8,3 +8,6 @@ data class Movie(
     val rating:Float?,
     val overview:String?
 )
+
+
+//data class of relevant information about Movie

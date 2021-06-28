@@ -3,6 +3,7 @@ package com.example.rottentomato.Model
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
@@ -14,9 +15,8 @@ class NetworkCall(private val context: Context){
     private var API_KEY = "15cd9477eaf83ac445e728f78ba48196"
     private var url = "https://api.themoviedb.org/3/movie/"
 
-
+    val movieList:MutableLiveData<ArrayList<Movie>> = MutableLiveData()
     var isLoading = MutableLiveData<Boolean>()
-    var movieList:MutableLiveData<ArrayList<Movie>> = MutableLiveData()
 
     var toprated: ArrayList<Movie> = ArrayList()
     var upcoming: ArrayList<Movie> = ArrayList()
@@ -38,7 +38,7 @@ class NetworkCall(private val context: Context){
 
         this.isLoading.value = true
 
-        val url = getURL(genre,page)//
+        val url = getURL(genre,page)
 
 
         val list = ArrayList<Movie>()
@@ -65,31 +65,32 @@ class NetworkCall(private val context: Context){
                     list.add(tmp)
                 }
 
-                this.isLoading.value = false
-
                 if(genre=="top_rated"){
                     toprated.addAll(list)
-                    updateMovieList(toprated)
+                    getMovieList(toprated)
                 }else if(genre=="upcoming"){
                     upcoming.addAll(list)
-                    updateMovieList(upcoming)
+                    getMovieList(upcoming)
                 }else if(genre=="popular"){
                     popular.addAll(list)
-                    updateMovieList(popular)
+                    getMovieList(popular)
                 }else if(genre=="now_playing"){
                     playing.addAll(list)
-                    updateMovieList(playing)
+                    getMovieList(playing)
                 }
 
+                this.isLoading.value = false
 
             }, {
                 error-> Toast.makeText(context,"${error.message}",Toast.LENGTH_LONG).show()
             })
 
         VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectArray)
+
+
     }
 
-    private fun updateMovieList(list:ArrayList<Movie>){
+    fun getMovieList(list:ArrayList<Movie>) {
         movieList.value = list
     }
 
