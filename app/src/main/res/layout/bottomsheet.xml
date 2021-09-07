@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:padding="16dp"
+            android:src="@drawable/ic_launcher_background">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/releaseDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Release Date: "
+            android:textSize="20sp"
+            android:padding="16dp"
+            >
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:hint="overview"
+            android:maxLines="15"
+            android:ellipsize="end"
+            >
+
+        </TextView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
